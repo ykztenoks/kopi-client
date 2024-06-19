@@ -1,5 +1,5 @@
 import "./App.css";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Homepage from "./pages/Homepage";
 import CoffeeList from "./pages/CoffeeList";
@@ -12,6 +12,22 @@ import CreateCoffeePage from "./pages/CreateCoffeePage";
 import { Toaster } from "react-hot-toast";
 
 function App() {
+  const isLoggedIn = () => {
+    return localStorage.getItem("authToken") ? (
+      <Outlet />
+    ) : (
+      <Navigate to="/login" />
+    );
+  };
+
+  const IsNotLoggedIn = () => {
+    return !localStorage.getItem("authToken") ? (
+      <Outlet />
+    ) : (
+      <Navigate to="/" />
+    );
+  };
+
   return (
     <div>
       <Navbar />
@@ -21,8 +37,12 @@ function App() {
         <Route path="/coffees" element={<CoffeeList />} />
         <Route path="/coffees/:coffeeId" element={<CoffeeDetails />} />
         <Route path="/about" element={<About />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/login" element={<LoginPage />} />
+
+        <Route element={<IsNotLoggedIn />}>
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/login" element={<LoginPage />} />
+        </Route>
+
         <Route path="/coffee/create" element={<CreateCoffeePage />} />
         <Route path="/*" element={<Error />} />
       </Routes>

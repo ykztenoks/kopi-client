@@ -12,8 +12,12 @@ function CoffeeCard({
   _id,
 }) {
   return (
-    <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-stone-700 dark:border-gray-700">
-      <img className="rounded-t-lg" src={image} alt="" />
+    <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-stone-700 dark:border-gray-700 ">
+      <img
+        className="rounded-t-lg h-[40vh] w-[40vw] object-cover hover:scale-105 transition-all"
+        src={image}
+        alt=""
+      />
 
       <div className="p-5">
         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">

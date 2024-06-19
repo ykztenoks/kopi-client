@@ -8,6 +8,7 @@ const CoffeeContext = createContext();
 function CoffeeProvider({ children }) {
   const [coffees, setCoffees] = useState(null);
   const navigate = useNavigate();
+
   const getAllCoffees = async () => {
     try {
       const response = await api.get("/coffee/all");
@@ -17,10 +18,6 @@ function CoffeeProvider({ children }) {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    getAllCoffees();
-  }, []);
 
   const createCoffee = async (body) => {
     try {
@@ -37,8 +34,52 @@ function CoffeeProvider({ children }) {
     }
   };
 
+  const updateCoffee = async (body, id, toggle) => {
+    try {
+      const response = await api.put("/coffee/" + id, body);
+
+      if (response.status === 200 || response.status === 201) {
+        toast.success(response.data.updated.name + " was updated succesfully");
+        getAllCoffees();
+        toggle(false);
+      }
+    } catch (error) {
+      toast.error("Error updating this coffee");
+      console.log(error);
+    }
+  };
+
+  const deleteCoffee = async (id) => {
+    try {
+      const check = confirm("Are you sure you want to delete this coffee?");
+      if (check) {
+        const response = await api.delete("/coffee/" + id);
+
+        if (response.status === 200) {
+          toast.success("Coffee deleted succesfully");
+          getAllCoffees();
+
+          navigate(-1);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getAllCoffees();
+  }, []);
   return (
-    <CoffeeContext.Provider value={{ coffees, createCoffee }}>
+    <CoffeeContext.Provider
+      value={{
+        coffees,
+        createCoffee,
+        updateCoffee,
+        deleteCoffee,
+        getAllCoffees,
+      }}
+    >
       {children}
     </CoffeeContext.Provider>
   );

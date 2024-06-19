@@ -6,7 +6,7 @@ function CoffeeList() {
   const { coffees } = useContext(CoffeeContext);
 
   return (
-    <div className="center gap-4 m-6">
+    <div className="center gap-4 m-6 flex-wrap">
       {coffees ? (
         coffees.map((coffee) => <CoffeeCard {...coffee} />)
       ) : (
